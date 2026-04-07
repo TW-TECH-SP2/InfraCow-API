@@ -1,4 +1,5 @@
 estrutura ideal:
+-------------
 api/
 │
 ├── src/
