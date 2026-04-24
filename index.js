@@ -2,6 +2,11 @@ import express from "express";
 const app = express();
 
 import connection from "./src/database/dabase-config";
+import Usuarios from "./src/models/Usuarios";
+import Fazendas from "./src/models/Fazendas";
+import Animais from "./src/models/Animais";
+import Alertas from "./src/models/Alertas"
+import Medicoes from "./src/models/Medicoes";
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
