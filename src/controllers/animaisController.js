@@ -1,1 +1,94 @@
+import Fazendas from "../models/Fazendas.js";
 import animalService from "../services/animalService.js"
+
+const registrarAnimal = async (req, res) => {
+    try {
+        const { nome_animal, codigo, genero, tipo, raca, peso, idade, id_fazenda } = req.body;
+        const { id, id_usuario} = req.params;
+        const imagem = req.file ? req.file.filename : null;
+
+        if(!imagem) {
+            imagem = "Null";
+        }
+        if (!nome_animal || !codigo || !genero || !tipo || !raca || !peso || !idade || !id_fazenda) {
+            return res.status(400).json({ error: "Campos Obrigatorios Não Respondidos"});
+        }
+
+        const fazenda = await Fazendas.findOne({ where: {id: id_fazenda, id_usuario}});
+
+        if(!fazenda) {
+            return res.status(403).json({ error: "Sem permissão para adicionar animais nessa fazenda"})
+        }
+
+        const criarAnimal = await animalService.create({nome_animal, codigo, genero, tipo, raca, peso, idade, id_fazenda, imagem,});
+        return res.status(201).json({ messagem: "Animal registrado com sucesso!", animal: criarAnimal});
+    } catch (error) {
+        console.log("Erro ao criar animal: " ,error);
+        return res.status(500).json({ error: "Erro interno"})
+    }
+}
+
+const deletarAnimal = async (req, res) => {
+    try {
+        const {id, id_usuario} = req.params
+        const apagado = await animalService.delete(id, id_usuario);
+        if(!apagado) {
+            return res.status(204).json({ mensagem: `Animal com o {id} deletado com sucesso!`});
+        } else {
+            return res.status(400).json({ error: "Não foi possível excluir o animal"});
+        }
+    } catch (error) {
+        console.log("Erro ao deletar animal: ", error);
+        return res.status(500).json({ error: "Erro interno"});
+    }
+}
+
+const atualizarAnimal = async (req, res) => {
+    try {
+        const {id, id_usuario} = req.params;
+        const imagem = req.file ? req.file.filename : undefined;
+        const { nome_animal, codigo, genero, tipo, raca, peso, idade } = req.body;
+        const atualizado = await animalService.update( id, id_usuario, {nome_animal, codigo, genero, tipo, raca, peso, idade, imagem});
+        if (atualizado) {
+            return res.status(200).json({ mensagem: `{nome_animal} atualizado com sucesso!`});
+        } else {
+            return res.status(404).json({ error: "Animal não encontrado"});
+        }
+    } catch (error) {
+        console.log("Erro ao atualizar animal: ", error);
+        res.status(500).json({ error: "Erro interno"})
+    }
+}
+
+const buscarTodosAnimais = async (req, res) => {
+    try {
+        const id_usuario = req.params
+        const animais = await animalService.getAll(id_usuario);
+        if(animais) {
+            return res.status(200).json({ animais:animais})
+        } else {
+            return res.status(404).json({ error: "Nenhuma Fazenda Encontrada Para Esse Usuário"})
+        }
+    } catch (error) {
+        console.log("Erro ao buscar animais:", error);
+        return res.status(500).json({error: "Erro interno"})
+    }
+}
+
+const buscarAnimalPorID = async (req, res) => {
+    try {
+        const {id, id_usuario} = req.params
+        const animal = await animalService.getOne(id, id_usuario)
+        if(animal) {
+            return res.status(200).json({ animal: animal})
+        } else {
+            return res.status(404).json({ error: "Animal não encontrado"})
+        }
+
+    } catch (error) {
+        console.log("Erro ao buscar animal específico", error);
+        return res.status(500).json({ error: "Erro interno"})
+    }
+}
+
+export default { registrarAnimal, deletarAnimal, atualizarAnimal, buscarTodosAnimais, buscarAnimalPorID};

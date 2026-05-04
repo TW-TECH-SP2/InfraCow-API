@@ -14,6 +14,7 @@ const registrarFazenda = async (req,res) =>{
 
 
     }catch(error){
+        console.log("Erro ao registrar fazenda: ", error)
         return res.status(500).json({ error: "Erro Interno de Servidor"})
     }
 }
@@ -30,6 +31,7 @@ const deletarFazenda = async (req,res) =>{
         }
     }
     catch(error){
+        console.log("Erro ao deletar a fazenda: ", error)
         return res.status(500).json({error: "PROBLEMAS DE SERVIDOR"})}
     
 }
@@ -51,7 +53,7 @@ const atualizarFazenda = async (req,res) =>{
         }
     }
     catch(error){
-        console.log(error)
+        console.log("Erro ao atualizar fazenda: ",error)
         return res.status(500).json({error:"PROBLEMA COM SERVIDOR"})
         
     }
@@ -66,20 +68,19 @@ const buscarTodasFazendas = async (req,res) =>{
         }
         else{
             return res.status(404).json({
-                message: "Nenhuma Fazenda Encontrada Para Esse Usuario"
-            })
+                message: "Nenhuma Fazenda Encontrada Para Esse Usuario"})
         }
-
     }
     catch(error)
     {
-        console.log(error)
+        console.log("Erro ao buscar fazenda", error)
         return res.status(500).json({error: "PROBLEMA COM SERVIDOR"})
     }
 }
 
 const buscarFazendaPorID = async (req,res) =>{
-   try{ const {id, id_usuario}= req.params
+   try{ 
+    const {id, id_usuario}= req.params
     if(!id){
         return res.status(400).json({message:"ID invalido"})
     }
@@ -92,7 +93,9 @@ const buscarFazendaPorID = async (req,res) =>{
     }
 }
 catch(error){
-    console.log(error)
+    console.log("Erro ao buscar fazenda específica ".error)
     return res.status(500).json({error:"PROBLEMA COM SERVIDOR"})
 }
 }
+
+export default { registrarFazenda, deletarFazenda, atualizarFazenda, buscarTodasFazendas, buscarFazendaPorID};
