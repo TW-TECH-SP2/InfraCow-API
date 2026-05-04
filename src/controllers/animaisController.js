@@ -1,1 +1,1 @@
-import animalService from "../services/animalService"
+import animalService from "../services/animalService.js"

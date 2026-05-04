@@ -1,4 +1,4 @@
-import fazendaService from "../services/fazendaService"
+import fazendaService from "../services/fazendaService.js"
 
 const registrarFazenda = async (req,res) =>{
     try{

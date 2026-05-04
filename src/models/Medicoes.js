@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
-import connection from "../database/dabase-config";
-import Animais from "./Animais";
+import connection from "../database/dabase-config.js";
+import Animais from "./Animais.js";
 
 const Medicoes = connection.define('medicoes', {
     id_medicao: {

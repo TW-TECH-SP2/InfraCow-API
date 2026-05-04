@@ -1,6 +1,6 @@
-import Animais from '../models/Animais'
-import Fazendas from '../models/Fazendas'
-import Medicoes from '../models/Medicoes'
+import Animais from '../models/Animais.js'
+import Fazendas from '../models/Fazendas.js'
+import Medicoes from '../models/Medicoes.js'
 
 class animalService {
     async getAll(id_usuario) {

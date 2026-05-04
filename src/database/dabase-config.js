@@ -10,9 +10,6 @@ const connection = new Sequelize({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     port: process.env.DB_PORT || 5432,
-    dialectOptions: {
-        ssl: process.env.DB_SSL == 'true'
-    }
 })
 
 export default connection;

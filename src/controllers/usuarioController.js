@@ -2,7 +2,7 @@ import usuarioService from "../services/usuarioService.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-const JWTSecret = "apiinfracow";
+const JWTSecret = process.env.JWTSecret;
 
 const criarUsuario = async (req, res) => {
   try {

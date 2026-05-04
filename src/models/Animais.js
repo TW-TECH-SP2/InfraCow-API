@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
-import connection from "../database/dabase-config";
-import Fazenda from "./Fazendas";
+import connection from "../database/dabase-config.js";
+import Fazenda from "./Fazendas.js";
 
 const Animais = connection.define('animais', {
     id_animal: {
@@ -39,7 +39,7 @@ const Animais = connection.define('animais', {
     id_fazenda: {
         type: Sequelize.INTEGER,
         references: {
-            model: fazendas,
+            model: 'fazendas',
             key: 'id_fazenda'
         }
     },

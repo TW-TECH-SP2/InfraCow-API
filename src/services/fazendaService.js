@@ -1,4 +1,4 @@
-import Fazendas from "../models/Fazendas";
+import Fazendas from "../models/Fazendas.js";
 
 class fazendaService {
     async getAll(id_usuario) {

@@ -1,4 +1,4 @@
-import Medicoes from "../models/Medicoes";
+import Medicoes from "../models/Medicoes.js";
 
 class MedicaoService {
     async getAll() {

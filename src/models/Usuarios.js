@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-import connection from "../database/dabase-config";
+import connection from "../database/dabase-config.js";
 
 const Usuarios = connection.define('usuarios', {
     id_usuario: {

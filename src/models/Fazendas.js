@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
-import connection from "../database/dabase-config";
-import Usuario from "./Usuarios";
+import connection from "../database/dabase-config.js";
+import Usuario from "./Usuarios.js";
 
 const Fazendas = connection.define('fazendas', {
     id_fazenda: {
@@ -35,7 +35,7 @@ const Fazendas = connection.define('fazendas', {
     id_usuario: {
         type: Sequelize.INTEGER,
         references: {
-            model: usuarios,
+            model: 'usuarios',
             key: 'id_usuario'
         }
     },

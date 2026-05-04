@@ -1,4 +1,4 @@
-import Usuarios from '../models/Usuarios'
+import Usuarios from '../models/Usuarios.js'
 import bcrypt from 'bcrypt';
 
 class usuarioService {
