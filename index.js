@@ -11,9 +11,17 @@ import Medicoes from "./src/models/Medicoes.js";
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+import usuarioRoutes from "./src/routes/usuarioRoutes.js";
+import fazendaRoutes from "./src/routes/fazendaRoutes.js";
+import animalRoutes from "./src/routes/animalRoutes.js";
+
+app.use("/", usuarioRoutes);
+app.use("/", fazendaRoutes);
+app.use("/", animalRoutes);
+
 connection.sync({ alter: true })
   .then(() => console.log("Banco sincronizado com sucesso!"))
   .catch((error) => console.error("Erro ao sincronizar banco: ", error));
 
-const PORT = process.env.PORT ||3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`API rodando em http://localhost:${PORT}`));
