@@ -1,16 +1,17 @@
 import express from 'express'
 import fazendaController from '../controllers/fazendaController.js'
+import Auth from '../middlewares/Auth.js'
 
 const fazendaRoutes = express.Router();
 
-fazendaRoutes.get("/fazendas", fazendaController.buscarTodasFazendas);
+fazendaRoutes.get("/fazendas", Auth.Autorization,fazendaController.buscarTodasFazendas);
 
-fazendaRoutes.post("/fazendas", fazendaController.registrarFazenda);
+fazendaRoutes.post("/fazendas", Auth.Autorization, fazendaController.registrarFazenda);
 
-fazendaRoutes.delete("/fazendas/:id", fazendaController.deletarFazenda);
+fazendaRoutes.delete("/fazendas/:id", Auth.Autorization, fazendaController.deletarFazenda);
 
-fazendaRoutes.put("/fazendas/:id", fazendaController.atualizarFazenda);
+fazendaRoutes.put("/fazendas/:id", Auth.Autorization, fazendaController.atualizarFazenda);
 
-fazendaRoutes.get("/fazendas/:id", fazendaController.buscarFazendaPorID);
+fazendaRoutes.get("/fazendas/:id", Auth.Autorization, fazendaController.buscarFazendaPorID);
 
 export default fazendaRoutes;
