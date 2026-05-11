@@ -15,6 +15,20 @@ const Alertas = connection.define('alertas', {
     anotacoes: {
         type: Sequelize.STRING,
         allowNull: false
+    },
+    id_animal: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: 'animais',
+            key: 'id_animal'
+        }
+    },
+    id_medicao: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: 'medicoes',
+            key: 'id_medicao'
+        }
     }
 
 })
