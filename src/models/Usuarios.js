@@ -18,6 +18,10 @@ const Usuarios = connection.define('usuarios', {
     senha: {
         type: Sequelize.STRING,
         allowNull: false
+    },
+    imagem: {
+        type: Sequelize.STRING,
+        allowNull: true,
     }
 })
 

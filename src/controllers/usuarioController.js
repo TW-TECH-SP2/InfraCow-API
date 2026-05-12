@@ -6,19 +6,21 @@ const JWTSecret = process.env.JWTSecret;
 
 const criarUsuario = async (req, res) => {
   try {
-    const { nome, email, senha } = req.body;
+    const { nome, email, senha, imagem } = req.body;
 
-    if (!nome || !email || !senha) {
-      return res
-        .status(400)
-        .json({ error: "Nome, e-mail e senha são obrigatórios" });
+    if(!imagem) {
+      imagem = "Null"
     }
 
-    await usuarioService.Create(nome, email, senha);
+    if (!nome || !email || !senha) {
+      return res.status(400).json({ error: "Nome, e-mail e senha são obrigatórios" });
+    }
+
+    const novoUsuario = await usuarioService.Create(nome, email, senha, imagem);
     return res.status(201).json({ message: `Usuário ${nome} criado com sucesso!`});
   } catch (error) {
     console.log(`Erro ao criar o usuário: ${nome} `, error);
-    return res.status(500).json({ error: "Erro interno ao criar usuário" });
+    return res.status(500).json({ error: "Erro interno ao criar usuário", usuario: novoUsuario});
   }
 };
 

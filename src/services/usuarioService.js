@@ -9,6 +9,7 @@ class usuarioService {
                 nome,
                 email,
                 senha: hash,
+                imagem,
             });
             return novoUsuario;
         } catch (error) {
@@ -28,21 +29,32 @@ class usuarioService {
     async getById(id) {
         try {
             const usuario = await Usuarios.findByPk(id);
+
+            if(!usuario) {
+                console.log(`Usuário com a id ${id} não encontrado!`)
+            }
+
             return usuario;
         } catch (error) {
             console.log("Erro ao buscar usuário por ID:", error)
         }
     }
 
-    async update(id, dadosAtualizados) {
+    async update(id, {nome, email, senha}) {
         try {
-            const usuario = await Usuarios.findByPk(id);
+            const [atualizado] = await Usuarios.update(
+                {
+                    nome, 
+                    email,
+                    senha,
+                    imagem,
+                },
+                {where: {id}}
+            )
 
-            if (!usuario) {
-                console.log("Usuário não encontrado");
+            if (!atualizado) {
+                console.log(`Usuário com a id ${id} não encontrado`);
             }
-
-            await usuario.update(dadosAtualizados);
         } catch(error) {
             console.log("Erro ao atualizar usuário: ", error)
         }
@@ -53,11 +65,11 @@ class usuarioService {
             const usuario = await Usuarios.findByPk(id);
 
             if(!usuario) {
-                console.log("Usuário não encontrado");
+                console.log(`Usuário com a id ${id} não encontrado`);
             }
+                console.log(`Usuário com a id ${id} foi excluído com sucesso!`)
 
             await usuario.destroy();
-            return true;
         } catch(error) {
             console.log("Erro ao deleter usuário: ",error)
         }
