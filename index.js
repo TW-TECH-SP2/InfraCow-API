@@ -14,10 +14,12 @@ app.use(express.json());
 import usuarioRoutes from "./src/routes/usuarioRoutes.js";
 import fazendaRoutes from "./src/routes/fazendaRoutes.js";
 import animalRoutes from "./src/routes/animalRoutes.js";
+import medicoesRoutes from "./src/routes/medicoesRoutes.js";
 
 app.use("/", usuarioRoutes);
 app.use("/", fazendaRoutes);
 app.use("/", animalRoutes);
+app.use("/", medicoesRoutes);
 
 connection.sync({ alter: true })
   .then(() => console.log("Banco sincronizado com sucesso!"))
