@@ -2,10 +2,10 @@ import fazendaService from "../services/fazendaService.js"
 
 const registrarFazenda = async (req,res) =>{
     try{
-        const {nome_fazenda, rua, bairro, cidade, CEP, numero, id_usuario, imagem}= req.body
-        if(!imagem){
-            imagem = "Null"
-        }
+        const {nome_fazenda, rua, bairro, cidade, CEP, numero, id_usuario}= req.body
+        const imagem = req.file ? req.file.filename: null 
+        
+
         if(!nome_fazenda || !rua || !bairro || !cidade || !CEP || !numero || !id_usuario){
             return res.status(400).json({error: "Campos Obrigatorios Não Respondidos"})
         }
@@ -20,7 +20,7 @@ const registrarFazenda = async (req,res) =>{
 }
 
 const deletarFazenda = async (req,res) =>{
-    try{
+    try {
         const {id, id_usuario} = req.params
         const apagado = await fazendaService.delete(id, id_usuario)
         if(apagado){
@@ -29,20 +29,15 @@ const deletarFazenda = async (req,res) =>{
         else{
             return res.status(400).json({message: "Não Foi Possivel Deletar a Fazenda"})
         }
-    }
-    catch(error){
+    } catch(error){
         console.log("Erro ao deletar a fazenda: ", error)
         return res.status(500).json({error: "PROBLEMAS DE SERVIDOR"})}
     
 }
 
 const atualizarFazenda = async (req,res) =>{
-    try{
-         const id = req.params
-        if(!id){
-           return res.status(400).json({message: "ID INVALIDO"})
-        }
-
+    try {
+        const {id} = req.params;
         const {nome_fazenda, rua, bairro, cidade, CEP, numero, id_usuario, imagem} = req.body
         const atualizado = await fazendaService.update(id,nome_fazenda, rua, bairro, cidade, CEP, numero, id_usuario, imagem)
         if(atualizado){
