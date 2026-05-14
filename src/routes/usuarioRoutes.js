@@ -10,6 +10,6 @@ usuarioRoutes.post("/login", usuarioController.loginUsuario);
 
 usuarioRoutes.get("/usuarios", Auth.Autorization, usuarioController.getUsuarioLogado);
 
-usuarioRoutes.put("/usuarios/:id", Auth.Autorization,usuarioController.updateUsuario);
+usuarioRoutes.put("/perfil", Auth.Autorization,usuarioController.updateUsuario);
 
 export default usuarioRoutes;
