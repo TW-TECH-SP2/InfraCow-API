@@ -21,7 +21,15 @@ app.use("/", fazendaRoutes);
 app.use("/", animalRoutes);
 app.use("/", medicoesRoutes);
 
-connection.sync({ alter: true })
+app.get("/health", (_req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+const syncOptions = process.env.NODE_ENV === "production"
+  ? {}
+  : { alter: true };
+
+connection.sync(syncOptions)
   .then(() => console.log("Banco sincronizado com sucesso!"))
   .catch((error) => console.error("Erro ao sincronizar banco: ", error));
 

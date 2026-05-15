@@ -4,8 +4,9 @@
   "description": "Este projeto foi dividido em dois repositórios independentes: **mobile** e **API**, seguindo boas práticas de desenvolvimento moderno.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon index.js"
+    "dev": "npx nodemon index.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",

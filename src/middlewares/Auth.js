@@ -4,7 +4,7 @@ import usuarioController from "../controllers/usuarioController.js";
 const JWTSecret = usuarioController.JWTSecret;
 
 const Autorization = (req, res, next) => {
-  const authtoken = req.headers["autorization"];
+  const authtoken = req.headers["authorization"] || req.headers["autorization"];
   if (authtoken != undefined) {
     const bearer = authtoken.split(" ");
     const token = bearer[1];
@@ -14,7 +14,7 @@ const Autorization = (req, res, next) => {
         return res.status(401).json({ error: "Token inválido ou expirado" });
       } else {
         req.token = token;
-        req.usuarioOn = {
+        req.usuarioLogado = {
           id: data.id,
           email: data.email,
         };
