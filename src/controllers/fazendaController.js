@@ -2,14 +2,15 @@ import fazendaService from "../services/fazendaService.js"
 
 const registrarFazenda = async (req,res) =>{
     try{
-        const {nome_fazenda, rua, bairro, cidade, CEP, numero, id_usuario}= req.body
+        const {nome_fazenda, rua, bairro, cidade, CEP, numero}= req.body || {}
+        const id_usuario = req.usuarioLogado?.id
         const imagem = req.file ? req.file.filename: null 
         
 
         if(!nome_fazenda || !rua || !bairro || !cidade || !CEP || !numero || !id_usuario){
             return res.status(400).json({error: "Campos Obrigatorios Não Respondidos"})
         }
-       const novaFazenda =  await fazendaService.create(nome_fazenda, rua, bairro, cidade, CEP, numero, id_usuario, imagem)
+       const novaFazenda =  await fazendaService.create({ nome_fazenda, rua, bairro, cidade, CEP, numero, id_usuario, imagem })
         return res.status(201).json({ message: `Fazenda ${nome_fazenda} criada com sucesso`,fazenda : novaFazenda}) 
 
 
@@ -21,7 +22,8 @@ const registrarFazenda = async (req,res) =>{
 
 const deletarFazenda = async (req,res) =>{
     try {
-        const {id, id_usuario} = req.params
+        const {id} = req.params
+        const id_usuario = req.usuarioLogado?.id
         const apagado = await fazendaService.delete(id, id_usuario)
         if(apagado){
             return res.status(204).json({message: `Fazenda ${id} Deletado Com Sucesso`})
@@ -38,8 +40,10 @@ const deletarFazenda = async (req,res) =>{
 const atualizarFazenda = async (req,res) =>{
     try {
         const {id} = req.params;
-        const {nome_fazenda, rua, bairro, cidade, CEP, numero, id_usuario, imagem} = req.body
-        const atualizado = await fazendaService.update(id,nome_fazenda, rua, bairro, cidade, CEP, numero, id_usuario, imagem)
+        const {nome_fazenda, rua, bairro, cidade, CEP, numero} = req.body || {}
+        const id_usuario = req.usuarioLogado?.id
+        const imagem = req.file ? req.file.filename : undefined
+        const atualizado = await fazendaService.update(id, id_usuario, { nome_fazenda, rua, bairro, cidade, CEP, numero, imagem })
         if(atualizado){
             return res.status(200).json({message:`${nome_fazenda} foi atualizada com sucesso`})
         }
@@ -56,7 +60,7 @@ const atualizarFazenda = async (req,res) =>{
 
 const buscarTodasFazendas = async (req,res) =>{
     try{
-        const id_usuario = req.params
+        const id_usuario = req.usuarioLogado?.id
         const fazendas =  await fazendaService.getAll(id_usuario)
         if(fazendas){
             return res.status(200).json({ fazendas:fazendas})
@@ -75,7 +79,8 @@ const buscarTodasFazendas = async (req,res) =>{
 
 const buscarFazendaPorID = async (req,res) =>{
    try{ 
-    const {id, id_usuario}= req.params
+    const {id}= req.params
+    const id_usuario = req.usuarioLogado?.id
     if(!id){
         return res.status(400).json({message:"ID invalido"})
     }

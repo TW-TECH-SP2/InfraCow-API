@@ -1,6 +1,7 @@
 import express from 'express'
 import fazendaController from '../controllers/fazendaController.js'
 import Auth from '../middlewares/Auth.js'
+import upload from '../middlewares/upload.js'
 
 const fazendaRoutes = express.Router();
 
@@ -18,7 +19,7 @@ const fazendaRoutes = express.Router();
  *       401:
  *         description: Token inválido
  */
-fazendaRoutes.get("/fazendas", Auth.Autorization,fazendaController.buscarTodasFazendas);
+fazendaRoutes.get("/fazendas", Auth.Autorization, fazendaController.buscarTodasFazendas);
 
 /**
  * @swagger
@@ -31,7 +32,7 @@ fazendaRoutes.get("/fazendas", Auth.Autorization,fazendaController.buscarTodasFa
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -41,7 +42,6 @@ fazendaRoutes.get("/fazendas", Auth.Autorization,fazendaController.buscarTodasFa
  *               - cidade
  *               - CEP
  *               - numero
- *               - id_usuario
  *             properties:
  *               nome_fazenda:
  *                 type: string
@@ -55,15 +55,16 @@ fazendaRoutes.get("/fazendas", Auth.Autorization,fazendaController.buscarTodasFa
  *                 type: string
  *               numero:
  *                 type: string
- *               id_usuario:
- *                 type: integer
+ *               imagem:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: Fazenda criada com sucesso
  *       400:
  *         description: Campos obrigatórios faltando
  */
-fazendaRoutes.post("/fazendas", Auth.Autorization, fazendaController.registrarFazenda);
+fazendaRoutes.post("/fazendas", Auth.Autorization, upload.single('imagem'), fazendaController.registrarFazenda);
 
 /**
  * @swagger
@@ -104,19 +105,32 @@ fazendaRoutes.delete("/fazendas/:id", Auth.Autorization, fazendaController.delet
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
- *             properties:\n *               nome_fazenda:\n *                 type: string
- *               rua:\n *                 type: string
- *               bairro:\n *                 type: string
- *               cidade:\n *                 type: string
- *               CEP:\n *                 type: string
- *               numero:\n *                 type: string
+ *             properties:
+ *               nome_fazenda:
+ *                 type: string
+ *               rua:
+ *                 type: string
+ *               bairro:
+ *                 type: string
+ *               cidade:
+ *                 type: string
+ *               CEP:
+ *                 type: string
+ *               numero:
+ *                 type: string
+ *               imagem:
+ *                 type: string
+ *                 format: binary
  *     responses:
- *       200:\n *         description: Fazenda atualizada com sucesso\n *       404:\n *         description: Fazenda não encontrada
+ *       200:
+ *         description: Fazenda atualizada com sucesso
+ *       404:
+ *         description: Fazenda não encontrada
  */
-fazendaRoutes.put("/fazendas/:id", Auth.Autorization, fazendaController.atualizarFazenda);
+fazendaRoutes.put("/fazendas/:id", Auth.Autorization, upload.single('imagem'), fazendaController.atualizarFazenda);
 
 /**
  * @swagger

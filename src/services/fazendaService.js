@@ -43,7 +43,7 @@ class fazendaService {
         }
     }
 
-    async update(id, {nome_fazenda, rua, bairro, cidade, CEP, numero, imagem}) {
+    async update(id, id_usuario, {nome_fazenda, rua, bairro, cidade, CEP, numero, imagem}) {
         try {
             const [atualizado] = await Fazendas.update(
                 {
@@ -55,7 +55,7 @@ class fazendaService {
                     numero,
                     imagem
                 },
-                {where: { id}}
+                {where: { id, id_usuario}}
             )
 
             if(!atualizado) {
