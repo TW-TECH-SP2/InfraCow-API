@@ -71,6 +71,16 @@ usuarioRoutes.post("/usuario", usuarioController.criarUsuario);
  *                   type: string
  *                 usuario:
  *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     nome:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     imagem:
+ *                       type: string
+ *                       nullable: true
  *       401:
  *         description: Credenciais inválidas
  *       500:

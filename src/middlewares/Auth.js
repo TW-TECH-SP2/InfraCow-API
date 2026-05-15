@@ -13,9 +13,11 @@ const Autorization = (req, res, next) => {
       if (error) {
         return res.status(401).json({ error: "Token inválido ou expirado" });
       } else {
+        const usuarioId = data.id ?? data.id_usuario;
+
         req.token = token;
         req.usuarioLogado = {
-          id: data.id,
+          id: usuarioId,
           email: data.email,
         };
         next();

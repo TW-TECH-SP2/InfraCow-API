@@ -44,8 +44,10 @@ const loginUsuario = async (req, res) => {
       return res.status(401).json({ error: "Crendenciais inválidas" });
     }
 
+    const usuarioId = usuario.id_usuario ?? usuario.id;
+
     const token = jwt.sign(
-      { id: usuario.id, email: usuario.email },
+      { id: usuarioId, id_usuario: usuarioId, email: usuario.email },
       JWTSecret,
       { expiresIn: "24h" }
     );
@@ -53,9 +55,10 @@ const loginUsuario = async (req, res) => {
     return res.status(200).json({ 
       token,
       usuario: {
-        id: usuario.id,
+        id: usuarioId,
         nome: usuario.nome,
-        email: usuario.email
+        email: usuario.email,
+        imagem: usuario.imagem,
       }
      });
   } catch (error) {
