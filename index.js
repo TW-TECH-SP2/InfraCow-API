@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 const app = express();
 
 import connection from "./src/database/dabase-config.js";
@@ -8,6 +9,7 @@ import Animais from "./src/models/Animais.js";
 import Alertas from "./src/models/Alertas.js"
 import Medicoes from "./src/models/Medicoes.js";
 
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 

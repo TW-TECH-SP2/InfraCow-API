@@ -2,7 +2,7 @@ import Usuarios from '../models/Usuarios.js'
 import bcrypt from 'bcrypt';
 
 class usuarioService {
-    async Create(nome, email, senha) {
+    async Create(nome, email, senha, imagem) {
         try {
             const hash = await bcrypt.hash(senha, 10);
             const novoUsuario = await Usuarios.create({
@@ -14,6 +14,7 @@ class usuarioService {
             return novoUsuario;
         } catch (error) {
             console.log("Erro ao criar o usuário: ", error)
+            throw error;
         }
     }
 
@@ -47,16 +48,18 @@ class usuarioService {
                     nome, 
                     email,
                     senha,
-                    imagem,
                 },
                 {where: {id}}
             )
 
             if (!atualizado) {
                 console.log(`Usuário com a id ${id} não encontrado`);
+                return false;
             }
+            return true;
         } catch(error) {
             console.log("Erro ao atualizar usuário: ", error)
+            throw error;
         }
     }
 
