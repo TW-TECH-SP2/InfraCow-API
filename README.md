@@ -1,4 +1,4 @@
-## 📌 Arquitetura do Projeto
+## Arquitetura do Projeto
 
 Este projeto foi dividido em dois repositórios independentes: **mobile** e **API**, seguindo boas práticas de desenvolvimento moderno.
 
@@ -184,7 +184,7 @@ O Render injeta a porta automaticamente via `PORT`. O código já usa essa vari�
 
 ## Status de Implementação
 
-### ✅ Implementado
+### Implementado
 - Autenticação com JWT
 - CRUD de Usuários
 - CRUD de Fazendas
@@ -195,12 +195,23 @@ O Render injeta a porta automaticamente via `PORT`. O código já usa essa vari�
 - Variáveis de ambiente
 - Deploy no Render
 - PostgreSQL no Render
+- Documentação Swagger/OpenAPI
 
-### 📝 Documentação
+### Documentação Interativa
 
-Veja a [API-DOCUMENTATION.md](API-DOCUMENTATION.md) para exemplos completos de uso com cURL.
+Acesse a documentação completa em Swagger em:
 
-**Resumo rápido:**
+```
+https://infracow-api-hv24.onrender.com/api-docs
+```
+
+Lá você pode:
+- Visualizar todos os endpoints documentados
+- Testar as rotas diretamente da interface
+- Ver exemplos de request e response
+- Autenticar com JWT integrado
+
+**Endpoints principais:**
 - POST `/usuario` - Criar usuário
 - POST `/login` - Autenticar
 - GET `/fazendas` - Listar fazendas (requer JWT)
