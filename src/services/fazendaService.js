@@ -33,10 +33,13 @@ class fazendaService {
 
             if (!deletado) {
                 console.log(`Fazenda com a id ${id} não encontrada`)
+                return false;
             }
-                console.log(`Fazenda com a id ${id} foi excluída com sucesso!`)
+            console.log(`Fazenda com a id ${id} foi excluída com sucesso!`)
+            return true;
         } catch(error) {
             console.log("Erro ao excluir fazenda: ", error);
+            return false;
         }
     }
 
@@ -57,11 +60,14 @@ class fazendaService {
 
             if(!atualizado) {
                 console.log(`Fazenda com a id ${id} não encontrada`)
+                return false;
             }
 
             console.log(`Dados da fazenda com a id ${id} alterados com sucesso!`)
+            return true;
         } catch (error) {
             console.log("Erro ao atualizar fazenda",error)
+            return false;
         }
     }
 

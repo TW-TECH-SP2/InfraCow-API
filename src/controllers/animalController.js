@@ -5,7 +5,7 @@ const registrarAnimal = async (req, res) => {
     try {
         const { nome_animal, codigo, genero, tipo, raca, peso, idade, id_fazenda } = req.body;
         const { id, id_usuario} = req.params;
-        const imagem = req.file ? req.file.filename : null;
+        let imagem = req.file ? req.file.filename : null;
 
         if(!imagem) {
             imagem = "Null";
@@ -32,8 +32,8 @@ const deletarAnimal = async (req, res) => {
     try {
         const {id, id_usuario} = req.params
         const apagado = await animalService.delete(id, id_usuario);
-        if(!apagado) {
-            return res.status(204).json({ mensagem: `Animal com o {id} deletado com sucesso!`});
+        if(apagado) {
+            return res.status(204).json({ mensagem: `Animal com o ${id} deletado com sucesso!`});
         } else {
             return res.status(400).json({ error: "Não foi possível excluir o animal"});
         }
@@ -50,7 +50,7 @@ const atualizarAnimal = async (req, res) => {
         const { nome_animal, codigo, genero, tipo, raca, peso, idade } = req.body;
         const atualizado = await animalService.update( id, id_usuario, {nome_animal, codigo, genero, tipo, raca, peso, idade, imagem});
         if (atualizado) {
-            return res.status(200).json({ mensagem: `{nome_animal} atualizado com sucesso!`});
+            return res.status(200).json({ mensagem: `${nome_animal} atualizado com sucesso!`});
         } else {
             return res.status(404).json({ error: "Animal não encontrado"});
         }

@@ -182,8 +182,40 @@ O Render injeta a porta automaticamente via `PORT`. O código já usa essa vari�
 4. Testar `/health`.
 5. Testar login e rotas protegidas com o header `Authorization`.
 
+## Status de Implementação
+
+### ✅ Implementado
+- Autenticação com JWT
+- CRUD de Usuários
+- CRUD de Fazendas
+- CRUD de Animais
+- CRUD de Medições
+- Endpoint de Saúde `/health`
+- CORS ativado
+- Variáveis de ambiente
+- Deploy no Render
+- PostgreSQL no Render
+
+### 📝 Documentação
+
+Veja a [API-DOCUMENTATION.md](API-DOCUMENTATION.md) para exemplos completos de uso com cURL.
+
+**Resumo rápido:**
+- POST `/usuario` - Criar usuário
+- POST `/login` - Autenticar
+- GET `/fazendas` - Listar fazendas (requer JWT)
+- POST `/fazendas` - Criar fazenda (requer JWT)
+- GET `/animais` - Listar animais (requer JWT)
+- POST `/animais` - Registrar animal (requer JWT)
+- GET `/medicao` - Listar medições (requer JWT)
+- POST `/medicao` - Registrar medição (requer JWT)
+
+Todas as operações (GET, POST, PUT, DELETE) funcionam para cada recurso.
+
 ## Observações técnicas
 
 - O projeto usa `sequelize.sync()` na inicialização para criar/sincronizar tabelas.
 - Em produção, o ideal é evoluir isso para migrations se o esquema crescer.
 - O middleware de autenticação foi ajustado para aceitar `Authorization` corretamente.
+- CORS está habilitado para aceitar requisições de qualquer origem.
+- O banco PostgreSQL está hospedado no Render.

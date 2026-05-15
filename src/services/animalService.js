@@ -41,12 +41,15 @@ class animalService {
 
             if(!animal) {
                 console.log(`Animal com a id ${id} não encontrado ou não pertence ao usuário`)
+                return false;
             }
 
             await animal.destroy();
             console.log(`Animal com a id ${id} foi excluído com sucesso!`)
+            return true;
         } catch (error) {
             console.log("Erro ao deleter o animal: ", error)
+            return false;
         }
     }
 
@@ -59,14 +62,16 @@ class animalService {
 
             if(!animal) {
                 console.log(`Animal com a id ${id} não foi encontrado ou não pertence ao usuário`)
+                return false;
             }
 
             await animal.update({nome_animal, codigo, genero, tipo, raca, peso, idade, imagem})
 
             console.log(`Dados do animal com a id ${id} foram alterados com sucesso!`)
-            return animal;
+            return true;
         } catch (error) {
             console.log("Erro ao atualizar o animal: ", error)
+            return false;
         }
     }
 
