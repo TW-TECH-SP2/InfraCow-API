@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swagger.js";
 const app = express();
 
 import connection from "./src/database/dabase-config.js";
@@ -12,6 +14,8 @@ import Medicoes from "./src/models/Medicoes.js";
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 import usuarioRoutes from "./src/routes/usuarioRoutes.js";
 import fazendaRoutes from "./src/routes/fazendaRoutes.js";
