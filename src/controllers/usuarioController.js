@@ -88,7 +88,11 @@ const updateUsuario = async (req, res) => {
   try {
     const userId = req.usuarioLogado.id;
 
-    const { nome, email, senha } = req.body;
+    const { nome, email, senha } = req.body || {};
+    const imagem =
+      req.files?.imagem?.[0]?.filename ||
+      req.files?.foto?.[0]?.filename ||
+      req.file?.filename;
 
     const usuario = await usuarioService.getById(userId);
 
@@ -98,8 +102,9 @@ const updateUsuario = async (req, res) => {
 
     if (email) {
       const emailExistente = await usuarioService.getOne(email);
+      const emailExistenteId = emailExistente?.id_usuario ?? emailExistente?.id;
 
-      if (emailExistente && emailExistente.id != userId) {
+      if (emailExistente && emailExistenteId != userId) {
         return res.status(400).json({ error: "E-mail já está em uso"})
       }
     }
@@ -109,13 +114,20 @@ const updateUsuario = async (req, res) => {
       email: email || usuario.email,
     };
 
+    if (imagem) {
+      dadosAtualizados.imagem = imagem;
+    }
+
     if (senha) {
       dadosAtualizados.senha = await bcrypt.hash(senha, 10);
     }
 
     await usuarioService.update(userId, dadosAtualizados);
 
-    return res.status(200).json({ message: "Usuário atualizado com sucesso!" });
+    const usuarioAtualizado = await usuarioService.getById(userId);
+    const { senha: _senha, ...dadosUsuario } = usuarioAtualizado.dataValues;
+
+    return res.status(200).json({ message: "Usuário atualizado com sucesso!", usuario: dadosUsuario });
 
   } catch (error) {
     console.log("Erro ao atualizar usuário: ", error);

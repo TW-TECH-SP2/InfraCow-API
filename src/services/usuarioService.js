@@ -41,15 +41,16 @@ class usuarioService {
         }
     }
 
-    async update(id, {nome, email, senha}) {
+    async update(id, {nome, email, senha, imagem}) {
         try {
             const [atualizado] = await Usuarios.update(
                 {
                     nome, 
                     email,
                     senha,
+                    imagem,
                 },
-                {where: {id}}
+                {where: {id_usuario: id}}
             )
 
             if (!atualizado) {

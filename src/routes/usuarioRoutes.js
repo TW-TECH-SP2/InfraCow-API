@@ -1,6 +1,7 @@
 import express from 'express'
 import usuarioController from '../controllers/usuarioController.js'
 import Auth from '../middlewares/Auth.js'
+import upload from '../middlewares/upload.js'
 
 const usuarioRoutes = express.Router();
 
@@ -127,6 +128,19 @@ usuarioRoutes.get("/usuarios", Auth.Autorization, usuarioController.getUsuarioLo
  *                 type: string
  *               senha:
  *                 type: string
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               senha:
+ *                 type: string
+ *               imagem:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       200:
  *         description: Usuário atualizado com sucesso
@@ -137,6 +151,6 @@ usuarioRoutes.get("/usuarios", Auth.Autorization, usuarioController.getUsuarioLo
  *       500:
  *         description: Erro interno do servidor
  */
-usuarioRoutes.put("/perfil", Auth.Autorization,usuarioController.updateUsuario);
+usuarioRoutes.put("/perfil", Auth.Autorization, upload.fields([{ name: 'imagem', maxCount: 1 }, { name: 'foto', maxCount: 1 }]), usuarioController.updateUsuario);
 
 export default usuarioRoutes;
