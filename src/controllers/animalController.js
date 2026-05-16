@@ -7,7 +7,7 @@ const registrarAnimal = async (req, res) => {
         const id_usuario = req.usuarioLogado?.id;
         const imagem = req.file ? req.file.filename : null;
 
-        if (!nome_animal || !codigo || !genero || !tipo || !raca || !peso || !idade || !id_fazenda) {
+        if (!nome_animal || genero == null || tipo == null || raca == null || peso == null || idade == null || id_fazenda == null) {
             return res.status(400).json({ error: "Campos Obrigatorios Não Respondidos"});
         }
 
