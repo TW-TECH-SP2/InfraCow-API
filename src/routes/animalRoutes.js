@@ -1,6 +1,7 @@
 import express from 'express'
 import animalController from '../controllers/animalController.js'
 import Auth from '../middlewares/Auth.js'
+import upload from '../middlewares/upload.js'
 
 const animalRoutes = express.Router();
 
@@ -29,14 +30,34 @@ animalRoutes.get("/animais", Auth.Autorization, animalController.buscarTodosAnim
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
+ *             properties:
+ *               nome_animal:
+ *                 type: string
+ *               codigo:
+ *                 type: integer
+ *               genero:
+ *                 type: string
+ *               tipo:
+ *                 type: string
+ *               raca:
+ *                 type: string
+ *               peso:
+ *                 type: number
+ *               idade:
+ *                 type: integer
+ *               id_fazenda:
+ *                 type: integer
+ *               imagem:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: Animal registrado com sucesso
  */
-animalRoutes.post("/animais", Auth.Autorization, animalController.registrarAnimal);
+animalRoutes.post("/animais", Auth.Autorization, upload.single('imagem'), animalController.registrarAnimal);
 
 /**
  * @swagger
@@ -72,11 +93,35 @@ animalRoutes.delete("/animais/:id", Auth.Autorization, animalController.deletarA
  *         required: true
  *         schema:
  *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nome_animal:
+ *                 type: string
+ *               codigo:
+ *                 type: integer
+ *               genero:
+ *                 type: string
+ *               tipo:
+ *                 type: string
+ *               raca:
+ *                 type: string
+ *               peso:
+ *                 type: number
+ *               idade:
+ *                 type: integer
+ *               imagem:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       200:
  *         description: Animal atualizado
  */
-animalRoutes.put("/animais/:id", Auth.Autorization, animalController.atualizarAnimal);
+animalRoutes.put("/animais/:id", Auth.Autorization, upload.single('imagem'), animalController.atualizarAnimal);
 
 /**
  * @swagger

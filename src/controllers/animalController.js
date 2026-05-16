@@ -3,18 +3,15 @@ import animalService from "../services/animalService.js"
 
 const registrarAnimal = async (req, res) => {
     try {
-        const { nome_animal, codigo, genero, tipo, raca, peso, idade, id_fazenda } = req.body;
-        const { id, id_usuario} = req.params;
-        let imagem = req.file ? req.file.filename : null;
+        const { nome_animal, codigo, genero, tipo, raca, peso, idade, id_fazenda } = req.body || {};
+        const id_usuario = req.usuarioLogado?.id;
+        const imagem = req.file ? req.file.filename : null;
 
-        if(!imagem) {
-            imagem = "Null";
-        }
         if (!nome_animal || !codigo || !genero || !tipo || !raca || !peso || !idade || !id_fazenda) {
             return res.status(400).json({ error: "Campos Obrigatorios Não Respondidos"});
         }
 
-        const fazenda = await Fazendas.findOne({ where: {id: id_fazenda, id_usuario}});
+        const fazenda = await Fazendas.findOne({ where: {id_fazenda, id_usuario}});
 
         if(!fazenda) {
             return res.status(403).json({ error: "Sem permissão para adicionar animais nessa fazenda"})
@@ -30,7 +27,8 @@ const registrarAnimal = async (req, res) => {
 
 const deletarAnimal = async (req, res) => {
     try {
-        const {id, id_usuario} = req.params
+        const {id} = req.params
+        const id_usuario = req.usuarioLogado?.id
         const apagado = await animalService.delete(id, id_usuario);
         if(apagado) {
             return res.status(204).json({ mensagem: `Animal com o ${id} deletado com sucesso!`});
@@ -45,9 +43,10 @@ const deletarAnimal = async (req, res) => {
 
 const atualizarAnimal = async (req, res) => {
     try {
-        const {id, id_usuario} = req.params;
+        const {id} = req.params;
+        const id_usuario = req.usuarioLogado?.id;
         const imagem = req.file ? req.file.filename : undefined;
-        const { nome_animal, codigo, genero, tipo, raca, peso, idade } = req.body;
+        const { nome_animal, codigo, genero, tipo, raca, peso, idade } = req.body || {};
         const atualizado = await animalService.update( id, id_usuario, {nome_animal, codigo, genero, tipo, raca, peso, idade, imagem});
         if (atualizado) {
             return res.status(200).json({ mensagem: `${nome_animal} atualizado com sucesso!`});
@@ -62,7 +61,7 @@ const atualizarAnimal = async (req, res) => {
 
 const buscarTodosAnimais = async (req, res) => {
     try {
-        const id_usuario = req.params
+        const id_usuario = req.usuarioLogado?.id
         const animais = await animalService.getAll(id_usuario);
         if(animais) {
             return res.status(200).json({ animais:animais})
@@ -77,7 +76,8 @@ const buscarTodosAnimais = async (req, res) => {
 
 const buscarAnimalPorID = async (req, res) => {
     try {
-        const {id, id_usuario} = req.params
+        const {id} = req.params
+        const id_usuario = req.usuarioLogado?.id
         const animal = await animalService.getOne(id, id_usuario)
         if(animal) {
             return res.status(200).json({ animal: animal})
