@@ -37,7 +37,7 @@ animalRoutes.get("/animais", Auth.Autorization, animalController.buscarTodosAnim
  *               nome_animal:
  *                 type: string
  *               codigo:
- *                 type: integer
+ *                 type: string
  *               genero:
  *                 type: string
  *               tipo:
@@ -103,7 +103,7 @@ animalRoutes.delete("/animais/:id", Auth.Autorization, animalController.deletarA
  *               nome_animal:
  *                 type: string
  *               codigo:
- *                 type: integer
+ *                 type: string
  *               genero:
  *                 type: string
  *               tipo:
