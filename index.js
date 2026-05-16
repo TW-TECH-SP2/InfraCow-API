@@ -43,7 +43,24 @@ const syncOptions = process.env.NODE_ENV === "production"
   : { alter: true };
 
 connection.sync(syncOptions)
-  .then(() => console.log("Banco sincronizado com sucesso!"))
+  .then(async () => {
+    console.log("Banco sincronizado com sucesso!");
+    
+    // Migração: converter codigo de INTEGER para VARCHAR (RFID)
+    try {
+      await connection.query(`
+        ALTER TABLE animais 
+        ALTER COLUMN codigo TYPE VARCHAR(255) USING codigo::text;
+      `);
+      console.log("Coluna 'codigo' convertida para VARCHAR com sucesso!");
+    } catch (error) {
+      if (error.message && error.message.includes("already exists")) {
+        console.log("Coluna 'codigo' já é VARCHAR, nada a fazer.");
+      } else {
+        console.warn("Aviso ao converter 'codigo':", error.message);
+      }
+    }
+  })
   .catch((error) => console.error("Erro ao sincronizar banco: ", error));
 
 const PORT = process.env.PORT || 3000;
