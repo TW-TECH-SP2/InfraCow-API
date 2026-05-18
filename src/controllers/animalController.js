@@ -29,12 +29,22 @@ const deletarAnimal = async (req, res) => {
     try {
         const {id} = req.params
         const id_usuario = req.usuarioLogado?.id
-        const apagado = await animalService.delete(id, id_usuario);
-        if(apagado) {
-            return res.status(204).json({ mensagem: `Animal com o ${id} deletado com sucesso!`});
-        } else {
-            return res.status(400).json({ error: "Não foi possível excluir o animal"});
+        
+        const resultado = await animalService.delete(id, id_usuario);
+        
+        if(resultado.sucesso) {
+            return res.status(200).json({ 
+                message: "Animal e medições deletados com sucesso.", 
+                deletedMedicoes: resultado.totalMedicoes,
+                deletedAnimalId: resultado.id_animal
+            });
         }
+        
+        if(resultado.tipo === 'nao_encontrado') {
+            return res.status(403).json({ error: "Animal não encontrado ou você não tem permissão para deletá-lo" });
+        }
+        
+        return res.status(500).json({ error: resultado.mensagem || "Erro ao deletar animal" });
     } catch (error) {
         console.log("Erro ao deletar animal: ", error);
         return res.status(500).json({ error: "Erro interno"});

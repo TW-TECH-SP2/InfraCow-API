@@ -1,6 +1,7 @@
 import Animais from '../models/Animais.js'
 import Fazendas from '../models/Fazendas.js'
 import Medicoes from '../models/Medicoes.js'
+import connection from '../database/dabase-config.js'
 
 class animalService {
     async getAll(id_usuario) {
@@ -34,29 +35,38 @@ class animalService {
 
     async delete(id, id_usuario) {
         try {
-            const animal = await Animais.findOne({
-                where: {id},
-                include: {model: Fazendas, where: {id_usuario}},
+            const resultado = await connection.transaction(async (transaction) => {
+                const animal = await Animais.findOne({
+                    where: {id_animal: id},
+                    include: {model: Fazendas, where: {id_usuario}},
+                    transaction,
+                });
+
+                if(!animal) {
+                    return { sucesso: false, tipo: 'nao_encontrado' };
+                }
+
+                const totalMedicoes = await Medicoes.destroy({
+                    where: {id_animal: id},
+                    transaction,
+                });
+
+                await animal.destroy({ transaction });
+                
+                return { sucesso: true, totalMedicoes, id_animal: id };
             });
 
-            if(!animal) {
-                console.log(`Animal com a id ${id} não encontrado ou não pertence ao usuário`)
-                return false;
-            }
-
-            await animal.destroy();
-            console.log(`Animal com a id ${id} foi excluído com sucesso!`)
-            return true;
+            return resultado;
         } catch (error) {
             console.log("Erro ao deleter o animal: ", error)
-            return false;
+            return { sucesso: false, tipo: 'erro', mensagem: error.message };
         }
     }
 
     async update(id, id_usuario, {nome_animal, codigo, genero, tipo, raca, peso, idade, imagem}) {
         try {
             const animal = await Animais.findOne({
-                where: { id },
+                where: { id_animal: id },
                 include: { model: Fazendas, where: {id_usuario} },
             })
 
@@ -78,7 +88,7 @@ class animalService {
     async getOne(id, id_usuario) {
         try {
             const animal = await Animais.findOne({
-                where: {id},
+                where: {id_animal: id},
                 include: {model: Fazendas, where: {id_usuario}},
             })
 
