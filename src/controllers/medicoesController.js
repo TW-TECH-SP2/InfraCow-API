@@ -2,19 +2,13 @@ import medicaoService from "../services/medicaoService.js";
 
 const registrarMedicao = async (req, res) => {
     try {
-        const { id, id_animal } = req.params;
-        const animalId = id || id_animal;
+        const { temp, datahora, id_animal } = req.body || {};
 
-        if (!animalId) {
-            return res.status(404).json({ message: "ANIMAL NAO ENCONTRADO" });
-        }
-;
-        const { temp, datahora } = req.body;
-        if (temp === undefined || !datahora) {
+        if (temp === undefined || !datahora || id_animal == null) {
             return res.status(400).json({ message: "CAMPOS OBRIGATORIOS NAO INSERIDOS" });
         }
 
-        const novaMedicao = await medicaoService.create({ temp, datahora, id_animal: animalId });
+        const novaMedicao = await medicaoService.create({ temp, datahora, id_animal });
 
         if (!novaMedicao) {
             return res.status(500).json({ message: "Erro ao registrar medição" });

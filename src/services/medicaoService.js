@@ -25,15 +25,18 @@ class MedicaoService {
 
     async delete(id) {
         try {
-            const deletado = await Medicoes.destroy({ where: { id }})
+            const deletado = await Medicoes.destroy({ where: { id_medicao: id }})
 
             if(!deletado) {
                 console.log(`Medição com a id ${id} não encontrada`)
+                return false;
             } else {
                 console.log(`Medição com a id ${id} foi deletada`)
+                return true;
             }
         } catch (error) {
             console.log("Erro ao deleter medição", error)
+            return false;
         }
     }
 
@@ -41,16 +44,19 @@ class MedicaoService {
         try {
             const atualizado = await Medicoes.update(
                 {temp, datahora, id_animal},
-                {where: {id} }
+                {where: {id_medicao: id} }
             );
 
-            if(!atualizado) {
+            if(!atualizado[0]) {
                 console.log(`Medição com a id ${id} não foi encontrada`)
+                return false;
             } else {
                 console.log(`Medição com a id ${id} atualizada com sucesso`);
+                return true;
             }
         } catch (error) {
             console.log("Erro ao atualizar medição", error)
+            return false;
         }
     }
 
@@ -58,7 +64,7 @@ class MedicaoService {
         try {
             console.log("Buscando medição com ID: ", id);
 
-            const medicao = await Medicoes.findOne({ where: {id} })
+            const medicao = await Medicoes.findOne({ where: {id_medicao: id} })
 
             if(!medicao) {
                 console.log(`Medição com a id ${id} não foi encontrada`)
@@ -66,6 +72,7 @@ class MedicaoService {
             return medicao;
         } catch (error) {
             console.log("Erro ao buscar essa medição", error)
+            return null;
         }
     }
 }

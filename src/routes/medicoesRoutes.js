@@ -6,7 +6,7 @@ const medicoesRoutes = express.Router();
 
 /**
  * @swagger
- * /medicao:
+ * /medicoes:
  *   get:
  *     summary: Listar todas as medições
  *     tags: [Medição]
@@ -16,11 +16,11 @@ const medicoesRoutes = express.Router();
  *       200:
  *         description: Lista de medições
  */
-medicoesRoutes.get("/medicao", Auth.Autorization, medicoesController.buscarTodasMedicoes);
+medicoesRoutes.get("/medicoes", Auth.Autorization, medicoesController.buscarTodasMedicoes);
 
 /**
  * @swagger
- * /medicao:
+ * /medicoes:
  *   post:
  *     summary: Registrar nova medição
  *     tags: [Medição]
@@ -43,11 +43,11 @@ medicoesRoutes.get("/medicao", Auth.Autorization, medicoesController.buscarTodas
  *       201:
  *         description: Medição registrada com sucesso
  */
-medicoesRoutes.post("/medicao", Auth.Autorization, medicoesController.registrarMedicao);
+medicoesRoutes.post("/medicoes", Auth.Autorization, medicoesController.registrarMedicao);
 
 /**
  * @swagger
- * /medicao/{id}:
+ * /medicoes/{id}:
  *   delete:
  *     summary: Deletar medição
  *     tags: [Medição]
@@ -63,11 +63,11 @@ medicoesRoutes.post("/medicao", Auth.Autorization, medicoesController.registrarM
  *       204:
  *         description: Medição deletada
  */
-medicoesRoutes.delete("/medicao/:id", Auth.Autorization, medicoesController.deletarMedicao);
+medicoesRoutes.delete("/medicoes/:id", Auth.Autorization, medicoesController.deletarMedicao);
 
 /**
  * @swagger
- * /medicao/{id}:
+ * /medicoes/{id}:
  *   put:
  *     summary: Atualizar medição
  *     tags: [Medição]
@@ -83,11 +83,11 @@ medicoesRoutes.delete("/medicao/:id", Auth.Autorization, medicoesController.dele
  *       200:
  *         description: Medição atualizada
  */
-medicoesRoutes.put("/medicao/:id", Auth.Autorization, medicoesController.atualizarMedicao);
+medicoesRoutes.put("/medicoes/:id", Auth.Autorization, medicoesController.atualizarMedicao);
 
 /**
  * @swagger
- * /medicao/{id}:
+ * /medicoes/{id}:
  *   get:
  *     summary: Buscar medição por ID
  *     tags: [Medição]
@@ -103,6 +103,6 @@ medicoesRoutes.put("/medicao/:id", Auth.Autorization, medicoesController.atualiz
  *       200:
  *         description: Dados da medição
  */
-medicoesRoutes.get("/medicao/:id", Auth.Autorization, medicoesController.buscarMedicaoPorID);
+medicoesRoutes.get("/medicoes/:id", Auth.Autorization, medicoesController.buscarMedicaoPorID);
 
 export default medicoesRoutes;
