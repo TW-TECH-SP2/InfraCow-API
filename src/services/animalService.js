@@ -1,6 +1,7 @@
 import Animais from '../models/Animais.js'
 import Fazendas from '../models/Fazendas.js'
 import Medicoes from '../models/Medicoes.js'
+import Notificacoes from '../models/Notificacoes.js'
 import connection from '../database/dabase-config.js'
 
 class animalService {
@@ -37,26 +38,22 @@ class animalService {
     async delete(id, id_usuario) {
         try {
             const resultado = await connection.transaction(async (transaction) => {
-                const animal = await Animais.findOne({
-                    where: {id_animal: id},
-                    transaction,
-                });
-                if(!animal) {
-                    return { sucesso: false, tipo: 'nao_encontrado' };
-                }
-                const fazenda = await Fazendas.findOne({
-                    where: { id_fazenda: animal.id_fazenda, id_usuario },
-                    transaction,
-                });
-                if(!fazenda) {
-                    return { sucesso: false, tipo: 'nao_encontrado' };
-                }
-                const totalMedicoes = await Medicoes.destroy({
-                    where: {id_animal: id},
-                    transaction,
-                });
+                const animal = await Animais.findOne({ where: { id_animal: id }, transaction });
+                if (!animal) return { sucesso: false, tipo: 'nao_encontrado' };
+
+                const fazenda = await Fazendas.findOne({ where: { id_fazenda: animal.id_fazenda, id_usuario }, transaction });
+                if (!fazenda) return { sucesso: false, tipo: 'nao_encontrado' };
+
+                // deletar notificações que referenciam o animal/medições
+                const totalNotificacoes = await Notificacoes.destroy({ where: { id_animal: id }, transaction });
+
+                // deletar medições
+                const totalMedicoes = await Medicoes.destroy({ where: { id_animal: id }, transaction });
+
+                // deletar animal
                 await animal.destroy({ transaction });
-                return { sucesso: true, totalMedicoes, id_animal: id };
+
+                return { sucesso: true, totalMedicoes, totalNotificacoes, id_animal: id };
             });
             return resultado;
         } catch (error) {
