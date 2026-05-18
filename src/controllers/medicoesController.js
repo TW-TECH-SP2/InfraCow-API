@@ -18,17 +18,19 @@ const registrarMedicao = async (req, res) => {
 
         const perigo = Number(novaMedicao.temp) <= 34 || Number(novaMedicao.temp) >= 38.7;
 
-        if (perigo) {
-            try {
-                await notificacaoService.create({
-                    id_animal: novaMedicao.id_animal,
-                    id_medicao: novaMedicao.id_medicao,
-                    perigo,
-                    id_usuario,
-                });
-            } catch (erroNotificacao) {
-                console.log("Falha ao criar notificação automática:", erroNotificacao);
+        try {
+            const notificacao = await notificacaoService.create({
+                id_animal: novaMedicao.id_animal,
+                id_medicao: novaMedicao.id_medicao,
+                perigo,
+                id_usuario,
+            });
+
+            if (!notificacao) {
+                console.log("Notificação não foi criada, mas a medição foi salva com sucesso.");
             }
+        } catch (erroNotificacao) {
+            console.log("Falha ao criar notificação automática:", erroNotificacao);
         }
 
         return res.status(201).json({ message: "Medição registrada com sucesso", medicao: novaMedicao });
