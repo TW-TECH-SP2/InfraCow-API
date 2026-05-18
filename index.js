@@ -25,6 +25,7 @@ app.use("/uploads", express.static(uploadsPath));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+
 // ========================================
 // DEFINIR ASSOCIAÇÕES SEQUELIZE PRIMEIRO
 // ========================================
@@ -37,6 +38,19 @@ Animais.belongsTo(Fazendas, { foreignKey: 'id_fazenda' });
 Animais.hasMany(Medicoes, { foreignKey: 'id_animal' });
 Medicoes.belongsTo(Animais, { foreignKey: 'id_animal' });
 
+Medicoes.hasMany(Notificacoes, { foreignKey: 'id_medicao' });
+Notificacoes.belongsTo(Medicoes, { foreignKey: 'id_medicao' });
+
+Animais.hasMany(Notificacoes, { foreignKey: 'id_animal' });
+Notificacoes.belongsTo(Animais, { foreignKey: 'id_animal' });
+
+import usuarioRoutes from "./src/routes/usuarioRoutes.js";
+import fazendaRoutes from "./src/routes/fazendaRoutes.js";
+import animalRoutes from "./src/routes/animalRoutes.js";
+import medicoesRoutes from "./src/routes/medicoesRoutes.js";
+import notificacaoRoutes from "./src/routes/notificacaoRoutes.js";
+
+app.use("/", usuarioRoutes);
 app.use("/", fazendaRoutes);
 app.use("/", animalRoutes);
 app.use("/", medicoesRoutes);
