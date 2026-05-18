@@ -1,6 +1,5 @@
 import { Sequelize } from "sequelize";
 import connection from "../database/dabase-config.js";
-import Usuario from "./Usuarios.js";
 
 const Fazendas = connection.define('fazendas', {
     id_fazenda: {

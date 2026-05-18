@@ -37,6 +37,22 @@ app.use("/", animalRoutes);
 app.use("/", medicoesRoutes);
 app.use("/", notificacaoRoutes);
 
+// Definir associações Sequelize
+Usuarios.hasMany(Fazendas, { foreignKey: 'id_usuario' });
+Fazendas.belongsTo(Usuarios, { foreignKey: 'id_usuario' });
+
+Fazendas.hasMany(Animais, { foreignKey: 'id_fazenda' });
+Animais.belongsTo(Fazendas, { foreignKey: 'id_fazenda' });
+
+Animais.hasMany(Medicoes, { foreignKey: 'id_animal' });
+Medicoes.belongsTo(Animais, { foreignKey: 'id_animal' });
+
+Medicoes.hasMany(Notificacoes, { foreignKey: 'id_medicao' });
+Notificacoes.belongsTo(Medicoes, { foreignKey: 'id_medicao' });
+
+Animais.hasMany(Notificacoes, { foreignKey: 'id_animal' });
+Notificacoes.belongsTo(Animais, { foreignKey: 'id_animal' });
+
 app.get("/health", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
