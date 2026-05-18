@@ -1,0 +1,63 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: usuario_banco
+          POSTGRES_PASSWORD: senha_usuario_banco
+          POSTGRES_DB: nome_banco
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U usuario_banco -d nome_banco"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Fazer checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Iniciar API em background
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_USER: usuario_banco
+          DB_PASSWORD: senha_usuario_banco
+          DB_NAME: nome_banco
+          DB_SSL: false
+          PORT: 3000
+        run: |
+          npm run start &
+          echo "Aguardando a API ficar disponível..."
+          for i in {1..20}; do
+            if curl -s http://localhost:3000/health | grep -q '"status":"ok"'; then
+              echo "API está disponível"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Falha ao aguardar a API ficar disponível"
+          exit 1
+
+      - name: Fazer healthcheck
+        run: curl -f http://localhost:3000/health
