@@ -1,8 +1,10 @@
 import medicaoService from "../services/medicaoService.js";
+import notificacaoService from "../services/notificacaoService.js";
 
 const registrarMedicao = async (req, res) => {
     try {
         const { temp, datahora, id_animal } = req.body || {};
+        const id_usuario = req.usuarioLogado?.id;
 
         if (temp === undefined || !datahora || id_animal == null) {
             return res.status(400).json({ message: "CAMPOS OBRIGATORIOS NAO INSERIDOS" });
@@ -12,6 +14,21 @@ const registrarMedicao = async (req, res) => {
 
         if (!novaMedicao) {
             return res.status(500).json({ message: "Erro ao registrar medição" });
+        }
+
+        const perigo = Number(novaMedicao.temp) <= 34 || Number(novaMedicao.temp) >= 38.7;
+
+        if (perigo) {
+            try {
+                await notificacaoService.create({
+                    id_animal: novaMedicao.id_animal,
+                    id_medicao: novaMedicao.id_medicao,
+                    perigo,
+                    id_usuario,
+                });
+            } catch (erroNotificacao) {
+                console.log("Falha ao criar notificação automática:", erroNotificacao);
+            }
         }
 
         return res.status(201).json({ message: "Medição registrada com sucesso", medicao: novaMedicao });
