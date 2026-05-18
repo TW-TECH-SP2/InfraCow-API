@@ -29,7 +29,7 @@ class fazendaService {
 
     async delete(id, id_usuario) {
         try {
-            const deletado = await Fazendas.destroy({ where: { id, id_usuario}})
+            const deletado = await Fazendas.destroy({ where: { id_fazenda: id, id_usuario }});
 
             if (!deletado) {
                 console.log(`Fazenda com a id ${id} não encontrada`)
@@ -55,7 +55,7 @@ class fazendaService {
                     numero,
                     imagem
                 },
-                {where: { id, id_usuario}}
+                { where: { id_fazenda: id, id_usuario } }
             )
 
             if(!atualizado) {
@@ -75,7 +75,7 @@ class fazendaService {
         try {
             console.log(`Buscando fazenda ID: ${id} para usuário ${id_usuario}`)
 
-            const fazenda = await Fazendas.findOne({  where: {id, id_usuario}})
+            const fazenda = await Fazendas.findOne({ where: { id_fazenda: id, id_usuario } })
 
             if(!fazenda) {
                 console.log(`Fazenda com a id ${id} não foi encontrada`)
