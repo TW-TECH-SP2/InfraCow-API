@@ -1,3 +1,5 @@
+import connection from "../database/dabase-config.js";
+import Animais from "../models/Animais.js";
 import Fazendas from "../models/Fazendas.js";
 
 class fazendaService {
@@ -29,9 +31,28 @@ class fazendaService {
 
     async delete(id, id_usuario) {
         try {
-            const deletado = await Fazendas.destroy({ where: { id_fazenda: id, id_usuario }});
+            const resultado = await connection.transaction(async (transaction) => {
+                const fazenda = await Fazendas.findOne({
+                    where: { id_fazenda: id, id_usuario },
+                    transaction,
+                });
 
-            if (!deletado) {
+                if (!fazenda) {
+                    return 0;
+                }
+
+                await Animais.destroy({
+                    where: { id_fazenda: id },
+                    transaction,
+                });
+
+                return await Fazendas.destroy({
+                    where: { id_fazenda: id, id_usuario },
+                    transaction,
+                });
+            });
+
+            if (!resultado) {
                 console.log(`Fazenda com a id ${id} não encontrada`)
                 return false;
             }
