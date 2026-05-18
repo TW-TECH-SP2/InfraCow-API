@@ -16,6 +16,7 @@ import Fazendas from "./src/models/Fazendas.js";
 import Animais from "./src/models/Animais.js";
 import Alertas from "./src/models/Alertas.js"
 import Medicoes from "./src/models/Medicoes.js";
+import Notificacoes from "./src/models/Notificacoes.js";
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
@@ -28,11 +29,13 @@ import usuarioRoutes from "./src/routes/usuarioRoutes.js";
 import fazendaRoutes from "./src/routes/fazendaRoutes.js";
 import animalRoutes from "./src/routes/animalRoutes.js";
 import medicoesRoutes from "./src/routes/medicoesRoutes.js";
+import notificacaoRoutes from "./src/routes/notificacaoRoutes.js";
 
 app.use("/", usuarioRoutes);
 app.use("/", fazendaRoutes);
 app.use("/", animalRoutes);
 app.use("/", medicoesRoutes);
+app.use("/", notificacaoRoutes);
 
 app.get("/health", (_req, res) => {
   res.status(200).json({ status: "ok" });
